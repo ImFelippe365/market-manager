@@ -6,7 +6,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
-import { Input, PasswordInput } from './src/components/Input';
+import { Teste } from './src/components/Input';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -18,11 +18,10 @@ export default function App() {
   if (!fontsLoaded)
     return null
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <>
       <StatusBar style="auto" />
-      <PasswordInput placeholder="Teste" label={"Nome do item"} />
-    </View>
+      <Routes />
+    </>
   );
 }
 

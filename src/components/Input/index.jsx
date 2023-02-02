@@ -3,7 +3,7 @@ import { View, Text, TextInput } from 'react-native';
 
 import styles from './styles';
 
-const Input = ({ label, ...props }) => {
+export const Input = ({ label, ...props }) => {
     return (
         <View>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -15,7 +15,19 @@ const Input = ({ label, ...props }) => {
     );
 }
 
-const PasswordInput = ({ label, ...props }) => {
+export const Teste = ({ label, ...props }) => {
+    return (
+        <View>
+            {label && <Text style={styles.label}>{label}</Text>}
+            <TextInput
+                style={styles.input}
+                {...props}
+            />
+        </View>
+    );
+}
+
+export const PasswordInput = ({ label, ...props }) => {
     return (
         <>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -28,5 +40,3 @@ const PasswordInput = ({ label, ...props }) => {
         </>
     );
 }
-
-export { Input, PasswordInput };
