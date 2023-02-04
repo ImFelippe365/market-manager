@@ -5,6 +5,7 @@ import theme from './../../styles/theme';
 const styles = StyleSheet.create({
 
     content: {
+        flex: 0,
         backgroundColor: theme.colors.white,
         borderBottomEndRadius: 12,
         borderBottomLeftRadius: 12,
