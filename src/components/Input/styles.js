@@ -8,11 +8,15 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.lightgray,
         borderWidth: 1,
         paddingHorizontal: 14,
-        height: 40,
-        width: '100%',
-        minWidth: 340,
+        paddingVertical: 12,
+        height: 45,
         fontFamily: theme.fonts.regular,
-        color: theme.colors.gray
+        color: theme.colors.gray,
+        fontSize: theme.sizes.md
+    },
+
+    container: {
+        width: '100%'
     },
 
     label: {
@@ -29,15 +33,16 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderColor: theme.colors.lightgray,
         borderWidth: 1,
+        paddingVertical: 12,
         paddingHorizontal: 14,
-        height: 40,
-        minWidth: 340,
+        height: 45,
         fontFamily: theme.fonts.regular,
-        color: theme.colors.gray
+        color: theme.colors.gray,
+        fontSize: theme.sizes.md
     },
 
     inputContent: {
-        width: '100%'
+        flex: 1
     }
 })
 

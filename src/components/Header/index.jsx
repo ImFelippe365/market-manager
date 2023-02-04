@@ -1,11 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-// import { Container } from './styles';
+import styles from './styles';
 
 const Header = ({ backButton = false }) => {
     return (
-        <View>
+        <View style={styles.container}>
             {
                 backButton &&
                 <TouchableOpacity></TouchableOpacity>

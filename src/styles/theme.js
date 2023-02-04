@@ -17,6 +17,16 @@ const theme = {
         semiBold: 'Inter_600SemiBold',
         bold: 'Inter_700Bold'
     },
+
+    sizes: {
+        'xs': 12,
+        'md': 14,
+        'base': 16,
+        'lg': 20,
+        'xl': 24,
+        '2xl': 32,
+        '3xl': 36
+    }
 }
 
 export default theme;
