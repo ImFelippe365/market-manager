@@ -5,6 +5,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Dashboard from './../pages/Dashboard/index';
 import Profile from './../pages/Profile/index';
+import theme from './../styles/theme';
+import { Archive, PieChart, User } from 'react-native-feather';
+import Items from './../pages/Items/index';
+import CreateItem from './../pages/CreateItem/index';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -12,10 +16,45 @@ const Stack = createNativeStackNavigator();
 const AppRoutes = () => {
 
     const TabNavigation = () =>
-        <Tab.Navigator>
-            <Tab.Screen name="Dashboard" component={Dashboard} />
-            {/* <Tab.Screen name="Items" component={SettingsScreen} /> */}
-            <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: theme.colors.white,
+                    elevation: 0,
+                    borderWidth: 0,
+                    height: 70,
+                    borderTopWidth: 0
+                },
+                tabBarShowLabel: false,
+                tabBarActiveTintColor: theme.colors.primary,
+                tabBarInactiveTintColor: theme.colors.gray
+            }}
+        >
+            <Tab.Screen
+                name="Dashboard"
+                component={Dashboard}
+                options={{
+                    tabBarIcon: ({ color }) =>
+                        <PieChart color={color} />
+                }}
+            />
+            <Tab.Screen
+                name="Items"
+                component={Items}
+                options={{
+                    tabBarIcon: ({ color }) =>
+                        <Archive color={color} />
+                }}
+            />
+            <Tab.Screen
+                name="Profile"
+                component={Profile}
+                options={{
+                    tabBarIcon: ({ color }) =>
+                        <User color={color} />
+                }}
+            />
         </Tab.Navigator>
 
     return (
@@ -25,6 +64,7 @@ const AppRoutes = () => {
             }}
         >
             <Stack.Screen name="Home" component={TabNavigation} />
+            <Stack.Screen name="CreateItem" component={CreateItem} />
         </Stack.Navigator>
     );
 }

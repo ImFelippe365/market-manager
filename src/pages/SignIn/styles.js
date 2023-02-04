@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         padding: 24,
-        width: '100%'
+        width: '100%',
+        backgroundColor: theme.colors.white
     },
 
     title: {
@@ -41,6 +42,10 @@ const styles = StyleSheet.create({
 
     emailField: {
         marginBottom: 12
+    },
+
+    horizontalLine: {
+        marginVertical: 16
     }
 })
 

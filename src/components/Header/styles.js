@@ -5,8 +5,13 @@ import theme from "../../styles/theme";
 const styles = StyleSheet.create({
     container: {
         marginTop: Constants.statusBarHeight,
-        height: 50,
-        backgroundColor: theme.colors.lightgray
+        paddingVertical: 16,
+        backgroundColor: 'transparent',
+        justifyContent: 'center'
+    },
+
+    backButton: {
+
     }
 })
 

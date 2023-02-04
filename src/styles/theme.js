@@ -9,7 +9,8 @@ const theme = {
         black: '#3B3F44',
         danger: '#C74141',
         warning: '#C79141',
-        success: '#64C741'
+        success: '#64C741',
+        shadow: '#3B3F4499',
     },
 
     fonts: {

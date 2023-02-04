@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.semiBold,
         color: theme.colors.gray,
         marginBottom: 6,
-        textAlign: 'flex-start'
+        textAlign: 'left'
     },
 
     inputContainer: {
@@ -42,8 +42,20 @@ const styles = StyleSheet.create({
     },
 
     inputContent: {
-        flex: 1
-    }
+        flex: 1,
+        fontFamily: theme.fonts.regular
+    },
+
+    errorText: {
+        color: theme.colors.danger,
+        fontSize: theme.sizes.xs,
+        marginTop: 4
+    },
+
+    errorMode: {
+        color: theme.colors.danger,
+        borderColor: theme.colors.danger,
+    },
 })
 
 export default styles;

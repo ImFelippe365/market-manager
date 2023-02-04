@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         backgroundColor: theme.colors.primary,
         width: '100%',
-        height: 50,
+        height: 48,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontFamily: theme.fonts.bold,
         color: theme.colors.white,
-        fontSize: theme.sizes.md
+        fontSize: theme.sizes.base
     }
 })
 
