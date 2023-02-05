@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
 import styles from './styles';
 import Header from './../../components/Header/index';
@@ -8,8 +8,22 @@ import theme from './../../styles/theme';
 import Card from './../../components/Card/index';
 import Purchase from '../../components/Purchase';
 import { DataTable } from 'react-native-paper';
+import api from '../../services/api';
 
 const Dashboard = () => {
+
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const getItems = async () => {
+        const { data } = await api.get('items?_sort=sold&_limit=5')
+        setItems(data)
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getItems()
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -35,19 +49,25 @@ const Dashboard = () => {
                 </View>
             </View>
             <Text style={styles.subtitle}>Produtos mais vendidos</Text>
-            <FlatList
-                data={[1, 2, 3, 4, 5]}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) =>
-                    <Card
-                        name={"Macarrão"}
-                        sold={0}
-                        price={'2,00'}
-                        style={styles.cardSize}
+            {
+                loading ?
+                    <ActivityIndicator style={{ paddingVertical: 50 }} color={theme.colors.primary} /> :
+                    <FlatList
+                        data={items}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) =>
+                            <Card
+                                name={item.name}
+                                image={item.image}
+                                sold={item.sold}
+                                price={item.price}
+                                style={styles.cardSize}
+                            />
+                        }
                     />
-                }
-            />
+            }
+
             <View style={styles.subtitleContainer}>
                 <Text style={styles.subtitle}>Últimas vendas</Text>
                 <Text style={styles.seeAll}>Ver todas</Text>

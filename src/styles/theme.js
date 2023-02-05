@@ -11,7 +11,8 @@ const theme = {
         warning: '#C79141',
         success: '#64C741',
         shadow: '#3B3F4499',
-        shadowPrimary: '#008FFF20'
+        shadowPrimary: '#008FFF20',
+        shadowWhite: '#FAFBFB99',
     },
 
     fonts: {

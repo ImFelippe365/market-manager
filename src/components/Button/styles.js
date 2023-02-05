@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
         borderRadius: 8
     },
 
+    buttonDisabled: {
+        backgroundColor: theme.colors.lightgray,
+    },
+
     buttonText: {
         fontFamily: theme.fonts.bold,
         color: theme.colors.white,

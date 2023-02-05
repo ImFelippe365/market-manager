@@ -46,7 +46,12 @@ const styles = StyleSheet.create({
 
     horizontalLine: {
         marginVertical: 16
-    }
+    },
+
+    authError: {
+        color: theme.colors.danger,
+        fontSize: theme.sizes.xs,
+    },
 })
 
 export default styles;

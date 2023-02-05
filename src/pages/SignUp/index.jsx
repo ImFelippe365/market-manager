@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import Header from './../../components/Header/index';
@@ -8,8 +8,12 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import Button from '../../components/Button';
 import { Input, MaskedInput, PasswordInput } from './../../components/Input/index';
-
+import api from './../../services/api';
+import { useNavigation } from '@react-navigation/native';
+import uuid from 'react-native-uuid';
 const SignUp = () => {
+
+    const navigator = useNavigation();
 
     const signUpSchema = yup.object().shape({
         name: yup.string().required("Campo obrigatório"),
@@ -23,11 +27,22 @@ const SignUp = () => {
     })
 
     const { control, handleSubmit, formState: { errors }, register } = useForm({
-        resolver: yupResolver(signUpSchema)
+        resolver: yupResolver(signUpSchema),
+        defaultValues: {
+            id: uuid.v4(),
+            picture: ""
+        }
     });
 
-    const submitForm = (data) => {
-        console.log(data)
+    const onSubmitUser = async (data) => {
+        try {
+            delete data.confirm_password
+            const response = await api.post('users', data);
+            Alert.alert("Sucesso", "Sua conta foi criada")
+            navigator.goBack();
+        } catch (error) {
+            Alert.alert("Erro", "Houve um problema ao tentar criar sua conta")
+        }
     }
 
     return (
@@ -41,7 +56,7 @@ const SignUp = () => {
                     <Input
                         style={styles.inputSpacing}
                         inputRef={ref}
-                        onChange={onChange}
+                        onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
                         label="Seu nome"
@@ -145,7 +160,7 @@ const SignUp = () => {
                 <Text style={styles.termsHighlight}> Termos e condições</Text> e nossa <Text style={styles.termsHighlight}>Política de privacidade</Text>.
             </Text>
 
-            <Button onPress={handleSubmit(submitForm, submitForm)} name="Finalizar" />
+            <Button onPress={handleSubmit(onSubmitUser)} name="Finalizar" />
         </ScrollView>
     );
 }

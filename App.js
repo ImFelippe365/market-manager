@@ -5,6 +5,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
+import { AuthProvider } from './src/contexts/AuthContext'
 import Routes from './src/routes';
 
 export default function App() {
@@ -17,9 +18,9 @@ export default function App() {
   if (!fontsLoaded)
     return null
   return (
-    <>
+    <AuthProvider>
       <StatusBar style="auto" />
       <Routes />
-    </>
+    </AuthProvider>
   );
 }

@@ -28,7 +28,7 @@ const AppRoutes = () => {
                 },
                 tabBarShowLabel: false,
                 tabBarActiveTintColor: theme.colors.primary,
-                tabBarInactiveTintColor: theme.colors.gray
+                tabBarInactiveTintColor: theme.colors.gray,
             }}
         >
             <Tab.Screen
@@ -36,7 +36,7 @@ const AppRoutes = () => {
                 component={Dashboard}
                 options={{
                     tabBarIcon: ({ color }) =>
-                        <PieChart color={color} />
+                        <PieChart color={color} fill={color + '20'} />
                 }}
             />
             <Tab.Screen
@@ -44,15 +44,16 @@ const AppRoutes = () => {
                 component={Items}
                 options={{
                     tabBarIcon: ({ color }) =>
-                        <Archive color={color} />
+                        <Archive color={color} fill={color + '20'} />,
+                    unmountOnBlur: true
                 }}
             />
             <Tab.Screen
                 name="Profile"
                 component={Profile}
                 options={{
-                    tabBarIcon: ({ color }) =>
-                        <User color={color} />
+                    tabBarIcon: ({ color, focused }) =>
+                        <User color={color} fill={color + '20'} />,
                 }}
             />
         </Tab.Navigator>

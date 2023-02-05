@@ -27,7 +27,27 @@ const styles = StyleSheet.create({
         aspectRatio: 1 / 1,
         borderRadius: 300,
         height: 160,
-        width: 160
+        width: 160,
+
+    },
+
+    userImageLoading: {
+        backgroundColor: theme.colors.shadowWhite,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 128,
+        zIndex: 99
+    },
+
+    userWithoutImage: {
+        backgroundColor: theme.colors.shadowPrimary,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     userName: {

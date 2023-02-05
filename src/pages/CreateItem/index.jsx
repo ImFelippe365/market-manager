@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import Header from '../../components/Header';
 import * as yup from 'yup';
 import styles from './styles';
@@ -10,44 +10,62 @@ import Button from './../../components/Button/index';
 import { Upload } from 'react-native-feather';
 import theme from './../../styles/theme';
 import * as ImagePicker from 'expo-image-picker';
-
+import api from './../../services/api';
+import { v4 } from 'uuid';
+import { useNavigation } from '@react-navigation/native';
+import uuid from 'react-native-uuid';
 const CreateItem = () => {
 
     const [itemImage, setItemImage] = useState();
-
+    const navigate = useNavigation();
     const createItemSchema = yup.object().shape({
         name: yup.string().required("Campo obrigatório"),
         price: yup.number().moreThan(0, "Defina um valor maior").required("Campo obrigatório"),
         category: yup.string().required("Campo obrigatório"),
-        barcode: yup.number().required("Campo obrigatório"),
-        quantity: yup.number().required("Campo obrigatório"),
+        barcode: yup.number().typeError("Código inválido, digite apenas números").required("Campo obrigatório"),
+        quantity: yup.number().typeError("Código inválido, digite apenas números").required("Campo obrigatório"),
     })
 
-    const { control, handleSubmit, formState: { errors }, register } = useForm({
-        resolver: yupResolver(createItemSchema)
+    const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+        resolver: yupResolver(createItemSchema),
+        defaultValues: {
+            id: uuid.v4(),
+            sold: 0,
+            image: ''
+        }
     });
 
-    const submitForm = (data) => {
-        console.log(data)
+    const submitForm = async (data) => {
+        if (itemImage) {
+            data.image = itemImage
+        }
+        try {
+            const response = await api.post('items', data)
+            Alert.alert("Sucesso!", "Seu item foi criado com sucesso.")
+            navigate.goBack();
+        } catch (err) {
+            console.warn(err)
+            Alert.alert("Erro", "Houve um erro ao tentar criar seu item")
+        }
     }
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            base64: true,
             aspect: [16, 9],
             quality: 1,
             allowsMultipleSelection: false
         });
 
-        console.log(result);
-
         if (!result.canceled) {
-            setItemImage(result.assets[0].base64);
+            setItemImage(result.assets[0].uri);
         }
     };
+
+    useEffect(() => {
+        // fazer pagina de edicao
+    }, [])
 
     return (
         <ScrollView style={styles.container}>
@@ -59,7 +77,7 @@ const CreateItem = () => {
                     <TouchableOpacity onPress={pickImage}>
                         <Image
                             style={styles.itemImage}
-                            source={{ uri: 'data:image/jpeg;base64,' + itemImage }}
+                            source={{ uri: itemImage }}
                             resizeMode='cover'
                         />
                     </TouchableOpacity> :
@@ -77,7 +95,7 @@ const CreateItem = () => {
                     <Input
                         style={styles.inputSpacing}
                         inputRef={ref}
-                        onChange={onChange}
+                        onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
                         label="Nome do item"
@@ -118,7 +136,7 @@ const CreateItem = () => {
                     <Input
                         style={styles.inputSpacing}
                         inputRef={ref}
-                        onChange={onChange}
+                        onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
                         label="Categoria"
@@ -135,12 +153,13 @@ const CreateItem = () => {
                     <Input
                         style={styles.inputSpacing}
                         inputRef={ref}
-                        onChange={onChange}
+                        onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
                         label="Código de barras"
                         error={errors?.barcode?.message}
                         placeholder="Código do item"
+                        keyboardType={'numeric'}
                     />
                 }
                 name='barcode'
@@ -152,18 +171,24 @@ const CreateItem = () => {
                     <Input
                         style={styles.inputSpacing}
                         inputRef={ref}
-                        onChange={onChange}
+                        onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
                         label="Quantidade disponível"
                         error={errors?.quantity?.message}
                         placeholder="Unidades"
+                        keyboardType={'numeric'}
                     />
                 }
                 name='quantity'
             />
 
-            <Button name={"Criar item"} onPress={handleSubmit(submitForm)} />
+            <Button
+                style={{ marginTop: 18 }}
+                loading={isSubmitting}
+                name={"Criar item"}
+                onPress={handleSubmit(submitForm)}
+            />
         </ScrollView>
     );
 }

@@ -49,8 +49,7 @@ const styles = StyleSheet.create({
     },
 
     cardSize: {
-        height: 100,
-        marginTop: 16,
+        height: 90,
         width: Dimensions.get('screen').width / 2.1,
         marginRight: 8,
     },
