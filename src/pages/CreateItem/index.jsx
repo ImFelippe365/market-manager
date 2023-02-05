@@ -14,25 +14,38 @@ import api from './../../services/api';
 import { v4 } from 'uuid';
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
+import useItem from './../../hooks/useItem';
+
 const CreateItem = () => {
 
-    const [itemImage, setItemImage] = useState();
-    const navigate = useNavigation();
     const createItemSchema = yup.object().shape({
         name: yup.string().required("Campo obrigatório"),
         price: yup.number().moreThan(0, "Defina um valor maior").required("Campo obrigatório"),
         category: yup.string().required("Campo obrigatório"),
         barcode: yup.number().typeError("Código inválido, digite apenas números").required("Campo obrigatório"),
         quantity: yup.number().typeError("Código inválido, digite apenas números").required("Campo obrigatório"),
+        image: yup.mixed()
     })
+
+    const {
+        itemDetails,
+        editItem
+    } = useItem();
+    console.log(itemDetails)
+    const navigate = useNavigation();
+
+    const [itemImage, setItemImage] = useState(itemDetails && itemDetails.image);
 
     const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(createItemSchema),
-        defaultValues: {
-            id: uuid.v4(),
-            sold: 0,
-            image: ''
-        }
+        defaultValues:
+            itemDetails ?
+                itemDetails
+                : {
+                    id: uuid.v4(),
+                    sold: 0,
+                    image: ''
+                }
     });
 
     const submitForm = async (data) => {
@@ -62,10 +75,6 @@ const CreateItem = () => {
             setItemImage(result.assets[0].uri);
         }
     };
-
-    useEffect(() => {
-        // fazer pagina de edicao
-    }, [])
 
     return (
         <ScrollView style={styles.container}>

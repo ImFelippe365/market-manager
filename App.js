@@ -7,6 +7,7 @@ import {
 } from '@expo-google-fonts/inter';
 import { AuthProvider } from './src/contexts/AuthContext'
 import Routes from './src/routes';
+import { ItemProvider } from './src/contexts/ItemContext';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -19,8 +20,10 @@ export default function App() {
     return null
   return (
     <AuthProvider>
-      <StatusBar style="auto" />
-      <Routes />
+      <ItemProvider>
+        <StatusBar style="auto" />
+        <Routes />
+      </ItemProvider>
     </AuthProvider>
   );
 }

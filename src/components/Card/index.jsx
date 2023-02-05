@@ -1,17 +1,23 @@
 import React from 'react';
-import { Image, View, Text } from 'react-native';
+import { Image, View, Text, TouchableOpacity } from 'react-native';
 import { MaskedText } from 'react-native-mask-text';
 import cardPhoto from '../../assets/teste.jpg'
+import useItem from '../../hooks/useItem';
+import EmptyImage from '../EmptyImage';
 import styles from './styles';
 
-const Card = ({ name, sold, price, image, style, soldOut = false }) => {
+const Card = ({ item, soldOut = false, ...props }) => {
     const currentPriceStyle = soldOut ? {
         ...styles.price,
         ...styles.soldOutMode
-    } : styles.price
+    } : styles.price;
+
+    const {
+        openModal,
+    } = useItem();
 
     return (
-        <View style={style}>
+        <TouchableOpacity {...props} onPress={() => openModal(item)}>
             <View style={styles.imageContainer}>
                 {
                     soldOut &&
@@ -20,23 +26,22 @@ const Card = ({ name, sold, price, image, style, soldOut = false }) => {
                     </View>
                 }
                 {
-                    image ?
+                    item.image ?
                         <Image
                             style={styles.cardImage}
-                            source={{ uri: image }}
+                            source={{ uri: item.image }}
                             resizeMode='cover'
                         />
-                        : <Image
-                            style={styles.cardImage}
-                            source={cardPhoto}
-                            resizeMode='cover'
-                        />
+                        : <EmptyImage small />
                 }
             </View>
             <View style={styles.content}>
-                <Text numberOfLines={1} style={[styles.title, soldOut && styles.soldOutMode]}>{name}</Text>
+                <Text numberOfLines={1} style={[styles.title, soldOut && styles.soldOutMode]}>{item.name}
+                </Text>
                 <View style={styles.descriptionContainer}>
-                    <Text style={[styles.soldQuantity, soldOut && styles.soldOutMode]}>{sold} vendidos</Text>
+                    <Text style={[styles.soldQuantity, soldOut && styles.soldOutMode]}>
+                        {item.sold} vendidos
+                    </Text>
                     <MaskedText
                         type="currency"
                         options={{
@@ -47,11 +52,11 @@ const Card = ({ name, sold, price, image, style, soldOut = false }) => {
                         }}
                         style={currentPriceStyle}
                     >
-                        {price}
+                        {item.price}
                     </MaskedText>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 

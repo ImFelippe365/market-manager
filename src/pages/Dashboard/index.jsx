@@ -51,17 +51,18 @@ const Dashboard = () => {
             <Text style={styles.subtitle}>Produtos mais vendidos</Text>
             {
                 loading ?
-                    <ActivityIndicator style={{ paddingVertical: 50 }} color={theme.colors.primary} /> :
-                    <FlatList
+                    <ActivityIndicator
+                        style={{ paddingVertical: 50 }}
+                        color={theme.colors.primary}
+                    /> : <FlatList
                         data={items}
                         horizontal
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) =>
                             <Card
-                                name={item.name}
-                                image={item.image}
+                                item={item}
                                 sold={item.sold}
-                                price={item.price}
+                                disabled
                                 style={styles.cardSize}
                             />
                         }
