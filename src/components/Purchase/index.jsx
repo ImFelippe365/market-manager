@@ -27,7 +27,7 @@ const Purchase = ({ userName, amount, date, status }) => {
             </DataTable.Cell>
             <DataTable.Cell style={{ flex: 0, justifyContent: 'flex-end' }}>
                 {
-                    status === 'sucessfull' ? <Check color={theme.colors.success} /> :
+                    status === 'successful' ? <Check color={theme.colors.success} /> :
                         <X color={theme.colors.danger} />
                 }
             </DataTable.Cell>

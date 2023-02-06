@@ -8,7 +8,7 @@ import EmptyImage from '../EmptyImage';
 import { Edit, Trash2, X } from 'react-native-feather';
 import theme from './../../styles/theme';
 import { useNavigation } from '@react-navigation/native';
-
+import { VerticalLine } from '../Lines'
 const ItemDetails = () => {
 
     const {
@@ -72,7 +72,7 @@ const ItemDetails = () => {
                                 <Edit color={theme.colors.primary} />
                                 <Text style={styles.editButtonText}>Editar</Text>
                             </TouchableOpacity>
-
+                            <VerticalLine />
                             <TouchableOpacity
                                 onPress={deleteItem}
                                 style={styles.button}

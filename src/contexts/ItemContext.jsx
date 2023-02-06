@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
+import useAuth from "../hooks/useAuth";
 import api from './../services/api';
 
 
@@ -8,10 +9,14 @@ const ItemContext = createContext({});
 
 const ItemProvider = ({ children }) => {
 
+    const { user } = useAuth(); 
+
     const [items, setItems] = useState([]);
+    const [topItems, setTopItems] = useState([]);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [itemDetails, setItemDetails] = useState();
     const [itemsLoading, setItemsLoading] = useState(true);
+    const [itemBarCode, setItemBarCode] = useState();
 
     const onOpenModal = (item) => {
         setItemDetails(item)
@@ -49,17 +54,20 @@ const ItemProvider = ({ children }) => {
 
     }
 
-    const onEditItem = async (item) => {
-
-    }
-
     const onClearItem = () => {
         setItemDetails(undefined);
+        setItemBarCode(undefined);
     }
 
     const getItems = async () => {
-        const { data } = await api.get('items')
+        const { data } = await api.get(`items?user_id=${user.id}`)
         setItems(data);
+        setItemsLoading(false);
+    }
+
+    const getTopItems = async () => {
+        const { data } = await api.get(`items?user_id=${user.id}&_sort=sold&_order=desc&_limit=3`)
+        setTopItems(data)
         setItemsLoading(false);
     }
 
@@ -73,11 +81,14 @@ const ItemProvider = ({ children }) => {
                 closeModal: onCloseModal,
                 isOpen: showDetailsModal,
                 deleteItem: onDeleteItem,
-                editItem: onEditItem,
                 clearItem: onClearItem,
                 reloadItems: getItems,
                 loading: itemsLoading,
-                setLoading: setItemsLoading
+                setLoading: setItemsLoading,
+                topItems,
+                reloadTopItems: getTopItems,
+                itemBarCode,
+                setItemBarCode
             }}
         >
             {children}

@@ -27,6 +27,19 @@ const styles = StyleSheet.create({
         color: theme.colors.primary,
         fontFamily: theme.fonts.semiBold
     },
+
+    emailAvaliableContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: -4,
+        marginBottom: 16
+    },
+
+    emailAvaliableText: {
+        fontFamily: theme.fonts.semiBold,
+        marginLeft: 4,
+        fontSize: theme.sizes.xs
+    },
 })
 
 export default styles;

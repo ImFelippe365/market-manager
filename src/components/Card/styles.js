@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     },
 
     descriptionContainer: {
+        marginTop: 3,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'

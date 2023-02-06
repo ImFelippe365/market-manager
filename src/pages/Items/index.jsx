@@ -10,17 +10,19 @@ import { useNavigation } from '@react-navigation/native';
 import api from './../../services/api';
 import ItemDetails from '../../components/ItemDetails';
 import useItem from '../../hooks/useItem';
+import useAuth from '../../hooks/useAuth';
 
 const Items = () => {
 
+    const { user } = useAuth();
+
     const {
         items,
-        setItems,
         isOpen,
-        openModal,
         reloadItems,
         loading,
-        setLoading
+        setLoading,
+        clearItem
     } = useItem();
 
     const [search, setSearch] = useState('');
@@ -29,11 +31,11 @@ const Items = () => {
     const searchResult = search ? searchResults : items;
 
     const { navigate } = useNavigation();
-    
+
     const getSearchResults = async () => {
         try {
             setLoading(true);
-            const { data } = await api.get(`items?name_like=${search}`)
+            const { data } = await api.get(`items?user_id=${user.id}&name_like=${search}`)
             setSearchResults(data)
         } catch (err) {
             console.warn(err)
@@ -77,6 +79,9 @@ const Items = () => {
                             showsVerticalScrollIndicator={false}
                             columnWrapperStyle={styles.itemColumns}
                             contentContainerStyle={styles.itemsContainer}
+                            ListEmptyComponent={
+                                <Text style={styles.emptyItems}>Sem itens para exibir</Text>
+                            }
                             renderItem={({ item }) =>
                                 <Card
                                     item={item}
@@ -87,7 +92,10 @@ const Items = () => {
                 }
 
                 <TouchableOpacity
-                    onPress={() => navigate('CreateItem')}
+                    onPress={() => {
+                        clearItem();
+                        navigate('CreateItem');
+                    }}
                     style={styles.floatButton}
                 >
                     <Plus color={theme.colors.white} />

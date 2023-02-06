@@ -9,6 +9,7 @@ import theme from './../styles/theme';
 import { Archive, PieChart, User } from 'react-native-feather';
 import Items from './../pages/Items/index';
 import CreateItem from './../pages/CreateItem/index';
+import ScanBarCode from '../pages/ScanBarCode';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -66,6 +67,7 @@ const AppRoutes = () => {
         >
             <Stack.Screen name="Home" component={TabNavigation} />
             <Stack.Screen name="CreateItem" component={CreateItem} />
+            <Stack.Screen name="ScanBarCode" component={ScanBarCode} />
         </Stack.Navigator>
     );
 }

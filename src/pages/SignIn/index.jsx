@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Alert, Text, View } from 'react-native';
 import Button from '../../components/Button';
 import { Input, PasswordInput } from '../../components/Input';
-import HorizontalLine from '../../components/Lines';
+import { HorizontalLine } from '../../components/Lines';
 import * as yup from 'yup';
 import styles from './styles';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -88,7 +88,7 @@ const SignIn = () => {
             <HorizontalLine style={styles.horizontalLine} />
 
             <Text style={styles.signUpMessage}>Não tem uma conta?
-                <Text onPress={handleSubmit(() => navigate('SignUp'))} style={styles.signUpAnchor}> Cadastre-se</Text>
+                <Text onPress={() => navigate('SignUp')} style={styles.signUpAnchor}> Cadastre-se</Text>
             </Text>
         </View>
     );

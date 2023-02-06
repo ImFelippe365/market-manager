@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import styles from './styles';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { Input, MaskedInput, PasswordInput } from '../../components/Input';
+import { BarCodeInput, Input, MaskedInput, PasswordInput } from '../../components/Input';
 import Button from './../../components/Button/index';
 import { Upload } from 'react-native-feather';
 import theme from './../../styles/theme';
@@ -15,6 +15,7 @@ import { v4 } from 'uuid';
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import useItem from './../../hooks/useItem';
+import useAuth from './../../hooks/useAuth';
 
 const CreateItem = () => {
 
@@ -29,37 +30,52 @@ const CreateItem = () => {
 
     const {
         itemDetails,
-        editItem
+        reloadItems,
+        reloadTopItems,
+        itemBarCode
     } = useItem();
-    console.log(itemDetails)
-    const navigate = useNavigation();
+
+    const { user } = useAuth();
+
+    const navigation = useNavigation();
 
     const [itemImage, setItemImage] = useState(itemDetails && itemDetails.image);
 
-    const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    const { control, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(createItemSchema),
-        defaultValues:
-            itemDetails ?
-                itemDetails
-                : {
-                    id: uuid.v4(),
-                    sold: 0,
-                    image: ''
-                }
+        defaultValues: {
+            id: uuid.v4(),
+            user_id: user.id,
+            sold: 0,
+            image: ''
+        }
     });
 
     const submitForm = async (data) => {
         if (itemImage) {
             data.image = itemImage
         }
-        try {
-            const response = await api.post('items', data)
-            Alert.alert("Sucesso!", "Seu item foi criado com sucesso.")
-            navigate.goBack();
-        } catch (err) {
-            console.warn(err)
-            Alert.alert("Erro", "Houve um erro ao tentar criar seu item")
+        if (itemDetails) {
+            try {
+                await api.put(`items/${itemDetails.id}`, data)
+                Alert.alert("Sucesso!", "Seu item foi editado com sucesso.")
+            } catch (err) {
+                console.warn(err)
+                Alert.alert("Erro", "Houve um erro ao tentar editar seu item")
+            }
+        } else {
+            try {
+                await api.post('items', data)
+                Alert.alert("Sucesso!", "Seu item foi criado com sucesso.")
+            } catch (err) {
+                console.warn(err)
+                Alert.alert("Erro", "Houve um erro ao tentar criar seu item")
+            }
         }
+
+        reloadItems();
+        reloadTopItems();
+        navigation.goBack();
     }
 
     const pickImage = async () => {
@@ -76,10 +92,30 @@ const CreateItem = () => {
         }
     };
 
+    useEffect(() => {
+        if (itemDetails) {
+            Object
+                .keys(itemDetails)
+                .map(key =>
+                    setValue(key, `${itemDetails[key]}`)
+                )
+        }
+    }, [])
+
+    useEffect(() => {
+        if (itemBarCode) {
+            setValue('barcode', itemBarCode)
+        }
+    }, [itemBarCode])
+
     return (
         <ScrollView style={styles.container}>
             <Header backButton />
-            <Text style={styles.title}>Adicionar item</Text>
+            <Text style={styles.title}>
+                {
+                    itemDetails ? 'Editar item' : 'Adicionar item'
+                }
+            </Text>
 
             {
                 itemImage ?
@@ -159,7 +195,7 @@ const CreateItem = () => {
             <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value, ref } }) =>
-                    <Input
+                    <BarCodeInput
                         style={styles.inputSpacing}
                         inputRef={ref}
                         onChangeText={onChange}
@@ -169,6 +205,7 @@ const CreateItem = () => {
                         error={errors?.barcode?.message}
                         placeholder="Código do item"
                         keyboardType={'numeric'}
+                        onBarCodePress={() => navigation.navigate('ScanBarCode')}
                     />
                 }
                 name='barcode'
@@ -195,7 +232,7 @@ const CreateItem = () => {
             <Button
                 style={{ marginTop: 18 }}
                 loading={isSubmitting}
-                name={"Criar item"}
+                name={"Confirmar"}
                 onPress={handleSubmit(submitForm)}
             />
         </ScrollView>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, View, Text, TouchableOpacity } from 'react-native';
 import { MaskedText } from 'react-native-mask-text';
-import cardPhoto from '../../assets/teste.jpg'
 import useItem from '../../hooks/useItem';
 import EmptyImage from '../EmptyImage';
 import styles from './styles';

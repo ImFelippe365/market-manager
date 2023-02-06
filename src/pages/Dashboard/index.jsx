@@ -9,20 +9,19 @@ import Card from './../../components/Card/index';
 import Purchase from '../../components/Purchase';
 import { DataTable } from 'react-native-paper';
 import api from '../../services/api';
+import useItem from '../../hooks/useItem';
 
 const Dashboard = () => {
 
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    const getItems = async () => {
-        const { data } = await api.get('items?_sort=sold&_limit=5')
-        setItems(data)
-        setLoading(false);
-    }
+    const {
+        topItems,
+        loading,
+        setLoading,
+        reloadTopItems
+    } = useItem();
 
     useEffect(() => {
-        getItems()
+        reloadTopItems()
     }, [])
 
     return (
@@ -48,26 +47,33 @@ const Dashboard = () => {
                     <Text style={styles.overviewItemAmount}>7000 vendas</Text>
                 </View>
             </View>
-            <Text style={styles.subtitle}>Produtos mais vendidos</Text>
             {
-                loading ?
-                    <ActivityIndicator
-                        style={{ paddingVertical: 50 }}
-                        color={theme.colors.primary}
-                    /> : <FlatList
-                        data={items}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) =>
-                            <Card
-                                item={item}
-                                sold={item.sold}
-                                disabled
-                                style={styles.cardSize}
+                topItems.length > 0 &&
+                <>
+                    <Text style={styles.subtitle}>Produtos mais vendidos</Text>
+                    {
+                        loading ?
+                            <ActivityIndicator
+                                style={{ paddingVertical: 50 }}
+                                color={theme.colors.primary}
+                            /> :
+                            <FlatList
+                                data={topItems}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item }) =>
+                                    <Card
+                                        item={item}
+                                        sold={item.sold}
+                                        disabled
+                                        style={styles.cardSize}
+                                    />
+                                }
                             />
-                        }
-                    />
+                    }
+                </>
             }
+
 
             <View style={styles.subtitleContainer}>
                 <Text style={styles.subtitle}>Últimas vendas</Text>
@@ -79,19 +85,19 @@ const Dashboard = () => {
                     userName="Breno"
                     amount="R$ 3.000,00"
                     date={"12/01/2023"}
-                    status={"sucessfull"}
+                    status={"successful"}
                 />
                 <Purchase
                     userName="Felippe"
-                    amount="R$ 3.000,00"
-                    date={"12/01/2023"}
-                    status={"sucessfull"}
+                    amount="R$ 10,00"
+                    date={"13/01/2023"}
+                    status={"failure"}
                 />
                 <Purchase
-                    userName="Breno"
-                    amount="R$ 3.000,00"
-                    date={"12/01/2023"}
-                    status={"sucessfull"}
+                    userName="José Neto"
+                    amount="R$ 38.000,00"
+                    date={"14/01/2023"}
+                    status={"successful"}
                 />
             </DataTable>
 

@@ -11,6 +11,8 @@ import { Input, MaskedInput, PasswordInput } from './../../components/Input/inde
 import api from './../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
+import { CheckCircle, XCircle } from 'react-native-feather';
+import theme from '../../styles/theme';
 const SignUp = () => {
 
     const navigator = useNavigation();
@@ -26,7 +28,7 @@ const SignUp = () => {
             .oneOf([yup.ref('password')], 'As senhas não coincidem'),
     })
 
-    const { control, handleSubmit, formState: { errors }, register } = useForm({
+    const { control, watch, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(signUpSchema),
         defaultValues: {
             id: uuid.v4(),
@@ -34,10 +36,31 @@ const SignUp = () => {
         }
     });
 
+    const verifyEmail = async () => {
+        const { data } = await api.get(`users?email=${watch('email')}`);
+
+        if (data.length > 0) {
+            setError('email', {
+                message: 'Este e-mail não está disponível'
+            })
+
+            return;
+        }
+    }
+
     const onSubmitUser = async (data) => {
+        const response = await api.get(`users?email=${watch('email')}`);
+
+        if (response.data.length > 0) {
+            setError('email', {
+                message: 'Este e-mail não está disponível'
+            })
+            return;
+        }
+
         try {
             delete data.confirm_password
-            const response = await api.post('users', data);
+            await api.post('users', data);
             Alert.alert("Sucesso", "Sua conta foi criada")
             navigator.goBack();
         } catch (error) {
@@ -87,16 +110,18 @@ const SignUp = () => {
             <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value, ref } }) =>
-                    <Input
-                        style={styles.inputSpacing}
-                        inputRef={ref}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        label="E-mail"
-                        error={errors?.email?.message}
-                        placeholder="nome@email.com"
-                    />
+                    <>
+                        <Input
+                            style={styles.inputSpacing}
+                            inputRef={ref}
+                            onChangeText={onChange}
+                            onBlur={() => { onBlur(); verifyEmail(); }}
+                            value={value}
+                            label="E-mail"
+                            error={errors?.email?.message}
+                            placeholder="nome@email.com"
+                        />
+                    </>
                 }
                 name='email'
             />
@@ -160,7 +185,11 @@ const SignUp = () => {
                 <Text style={styles.termsHighlight}> Termos e condições</Text> e nossa <Text style={styles.termsHighlight}>Política de privacidade</Text>.
             </Text>
 
-            <Button onPress={handleSubmit(onSubmitUser)} name="Finalizar" />
+            <Button
+                loading={isSubmitting}
+                onPress={handleSubmit(onSubmitUser)}
+                name="Finalizar"
+            />
         </ScrollView>
     );
 }

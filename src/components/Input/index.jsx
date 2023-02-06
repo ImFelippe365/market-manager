@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
-import { Eye, EyeOff, Search } from "react-native-feather";
+import { Camera, Eye, EyeOff, Search } from "react-native-feather";
 import theme from '../../styles/theme';
 import styles from './styles';
 import { MaskedTextInput } from 'react-native-mask-text';
@@ -76,6 +76,24 @@ export const SearchInput = ({ label, style, ...props }) => {
                     {...props}
                 />
                 <Search width={20} height={20} color={theme.colors.gray} />
+            </View>
+        </View>
+    );
+}
+
+export const BarCodeInput = ({ label, style, onBarCodePress, ...props }) => {
+
+    return (
+        <View style={[styles.container, style]}>
+            {label && <Text style={styles.label}>{label}</Text>}
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.inputContent}
+                    {...props}
+                />
+                <TouchableOpacity onPress={onBarCodePress}>
+                    <Camera width={20} height={20} color={theme.colors.primary} />
+                </TouchableOpacity>
             </View>
         </View>
     );

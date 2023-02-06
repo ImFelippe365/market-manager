@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
 
     inputContent: {
         flex: 1,
-        fontFamily: theme.fonts.regular
+        fontFamily: theme.fonts.regular,
+        color: theme.colors.gray
     },
 
     errorText: {

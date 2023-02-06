@@ -49,6 +49,13 @@ const styles = StyleSheet.create({
         bottom: 10,
         elevation: 2
     },
+
+    emptyItems: {
+        fontSize: theme.sizes.xs,
+        color: theme.colors.gray,
+        fontFamily: theme.fonts.regular,
+        textAlign: 'center'
+    }
 })
 
 export default styles;

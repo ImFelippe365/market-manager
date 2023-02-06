@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 18,
-        backgroundColor: theme.colors.shadow
+        backgroundColor: '#00000099'
     },
 
     modalContainer: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 
     name: {
         color: theme.colors.black,
-        fontSize: theme.sizes.lg,
+        fontSize: theme.sizes.xl,
         fontFamily: theme.fonts.bold
     },
 
