@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 18
+        marginTop: 24
     },
 
     button: {
